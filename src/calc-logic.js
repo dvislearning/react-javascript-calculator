@@ -1,19 +1,16 @@
 let total = 0;
 
-let currentValid = null;
-
 const operators = ["+","-","*","/"];
-
-let calcs = [5, "+", 10]
 
 let display = ["0", "+", "9", "8", ".", "0"];
 
-let firstEntry = display.length === 1 && display[0] === "0";
+const firstEntry = display.length === 1 && display[0] === "0";
 
-let afterOperator = operators.includes(display[display.length-1]);
+const afterOperator = operators.includes(display[display.length-1]);
 
-let zeroAfterOperator = operators.includes(display[display.length-2]) && display[display.length-1] === "0";
+const zeroAfterOperator = operators.includes(display[display.length-2]) && display[display.length-1] === "0";
 
+// Checks if key press is valid
 function processInput(input) {
     if(/[123456789]/.test(input)) {
         if(firstEntry) {
@@ -72,25 +69,6 @@ const operations = {
     '-': (a,b) => {return a-b},
     '*': (a,b) => {return a*b},
     '/': (a,b) => {return a/b}
-}
-
-let add = function(a,b) {return a+b}
-let subtract = function(a,b) {return a-b}
-let multiply = function(a,b) {return a*b}
-let divide = function(a,b) {return a/b}
-
-
-function processChunk(chunk) {
-    // Stuff
-}
-
-
-function isValidExpression(string) {
-    if (/(\d+(\+|\-|\*|\/)\d+)/g.test(string)) {
-        currentSegment = string;
-        currentOperator = string[1]
-    }
-    return false
 }
 
 function calculateExpression(expression) {

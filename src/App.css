@@ -1,5 +1,59 @@
-.App {
-  text-align: center;
+
+
+#App {
+  background-color: rgb(255, 255, 255);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: blue;
+}
+
+#calculator {
+  background-color: rgb(0, 0, 0);
+  border: 1.25px solid grey;
+  box-shadow: 0 0 20px rgba(54, 54, 88, 0.63);
+  height: 90vh;
+  width: 30%;
+}
+
+#calc-header {
+  border: 2px solid blueviolet;
+  height: 5%;
+  width: 100%;
+  text-align: right;
+}
+
+#display {
+  border: 2px solid rgba(219, 93, 46, 0.918);
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  word-wrap: break-word;
+  height: 11%;
+  width: 96%;
+  margin: auto;
+}
+
+#display-text {
+  display: block;
+  text-align: right;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+  direction: ltr;
+  white-space: nowrap;
+  height: 100%;
+  width: 100%;
+  padding: 0 2.5% 0 2.5%;
+  font-size: 1.83em;
+}
+
+#calc-inputs {
+  border: 2px solid blueviolet;
+  height: 81%;
+  width: 100%;
 }
 
 .App-logo {
@@ -8,16 +62,6 @@
   pointer-events: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
 .App-link {
   color: #61dafb;
