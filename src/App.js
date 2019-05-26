@@ -1,24 +1,42 @@
 import React, { Component } from 'react';
 import './App.css';
+import './calc-logic.js';
+import * as Calc from './calc-logic.js';
+
 
 
 const inputs = [
-  {"id":"one", "className":"numberButton", "key":"1"},
-  {"id":"two", "className":"numberButton", "key":"2"},
-  {"id":"three", "className":"numberButton", "key":"3"},
-  {"id":"four", "className":"numberButton", "key":"4"},
-  {"id":"five", "className":"numberButton", "key":"5"},
-  {"id":"six", "className":"numberButton", "key":"6"},
-  {"id":"seven", "className":"numberButton", "key":"7"},
-  {"id":"eight", "className":"numberButton", "key":"8"},
-  {"id":"nine", "className":"numberButton", "key":"9"},
-  {"id":"zero", "className":"numberButton", "key":"0"}
-]
+  {"id":"clear", "className":"button", "key":"Escape"},
+  {"id":"one", "className":"button", "key":"1"},
+  {"id":"two", "className":"button", "key":"2"},
+  {"id":"three", "className":"button", "key":"3"},
+  {"id":"four", "className":"button", "key":"4"},
+  {"id":"five", "className":"button", "key":"5"},
+  {"id":"six", "className":"button", "key":"6"},
+  {"id":"seven", "className":"button", "key":"7"},
+  {"id":"eight", "className":"button", "key":"8"},
+  {"id":"nine", "className":"button", "key":"9"},
+  {"id":"zero", "className":"button", "key":"0"},
+  {"id":"add", "className":"button", "key":"+"},
+  {"id":"subtract", "className":"button", "key":"-"},
+  {"id":"multiply", "className":"button", "key":"*"},
+  {"id":"divide", "className":"button", "key":"/"},
+  {"id":"decimal", "className":"button", "key":"."},
+  {"id":"equals", "className":"button", "key":"="}
 
-const CalcButtons = () => {
+];
+
+const CalcButtons = (props) => {
+  console.log(props)
   const buttons = inputs.map(function(button) {
-    return <button className={button.className} id={button.id}>{button.key}</button>
-  })
+    return <button 
+              className={button.className} 
+              id={button.id} 
+              key={button.key} 
+              onClick={props.onClick}>
+                {button.key === "Escape" ? "AC" : button.key}
+          </button>
+  });
   
   return (
     <div>
@@ -33,20 +51,31 @@ class App extends Component {
     super(props);
 
     this.state={
-      //display:["0","+","7","0","+","7","0","+","7","0","+","7","0","+","7",]
-      display:["0"]
+      display: ["0"]
     }
 
     this.handleEvent = this.handleEvent.bind(this);
     this.handlePress = this.handlePress.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleEvent(userInput) {
     let currentDisplay = this.state.display;
-    currentDisplay.push(userInput.key)
+    let processedDisplay;
+    if(userInput.id === "clear") {
+      processedDisplay = ["0"];
+    }
+    else if(userInput.id === "equals") {
+      let verifiedEqualsRequest = Calc.processEquals(currentDisplay).join('');
+      processedDisplay = [Calc.evalExpression(verifiedEqualsRequest)];
+    }
+    else {
+      processedDisplay = Calc.processInput(userInput.key, currentDisplay);
+    }
+
     this.setState({
-      display: currentDisplay
-    })
+      display: processedDisplay
+    }) 
   }
 
   handlePress(event) {
@@ -57,7 +86,10 @@ class App extends Component {
   }
 
   handleClick(event) {
-    //more stuff
+    if(event.target.className === "button"){
+      const clickTarget = inputs.filter((input) => input.id === event.target.id)[0];
+      this.handleEvent(clickTarget);
+    }
   }
 
   componentDidMount() {
@@ -73,7 +105,7 @@ class App extends Component {
       <div id="App">
         <div id="calculator">
           <div id="calc-header">
-            We are here
+            A Calculator
           </div>
   
           <div id="display">
@@ -83,7 +115,7 @@ class App extends Component {
           </div>
   
           <div id="calc-inputs">
-            <CalcButtons />
+            <CalcButtons onClick={this.handleClick} />
           </div>
         </div>
       </div>
