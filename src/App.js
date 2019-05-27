@@ -6,23 +6,23 @@ import * as Calc from './calc-logic.js';
 
 
 const inputs = [
-  {"id":"clear", "className":"button", "key":"Escape"},
   {"id":"one", "className":"button", "key":"1"},
   {"id":"two", "className":"button", "key":"2"},
   {"id":"three", "className":"button", "key":"3"},
+  {"id":"divide", "className":"button", "key":"/"},
   {"id":"four", "className":"button", "key":"4"},
   {"id":"five", "className":"button", "key":"5"},
   {"id":"six", "className":"button", "key":"6"},
+  {"id":"multiply", "className":"button", "key":"*"},
   {"id":"seven", "className":"button", "key":"7"},
   {"id":"eight", "className":"button", "key":"8"},
   {"id":"nine", "className":"button", "key":"9"},
-  {"id":"zero", "className":"button", "key":"0"},
-  {"id":"add", "className":"button", "key":"+"},
   {"id":"subtract", "className":"button", "key":"-"},
-  {"id":"multiply", "className":"button", "key":"*"},
-  {"id":"divide", "className":"button", "key":"/"},
+  {"id":"zero", "className":"button", "key":"0"},
   {"id":"decimal", "className":"button", "key":"."},
-  {"id":"equals", "className":"button", "key":"="}
+  {"id":"equals", "className":"button", "key":"="},
+  {"id":"add", "className":"button", "key":"+"},
+  {"id":"clear", "className":"button", "key":"Escape"}
 
 ];
 
@@ -39,7 +39,7 @@ const CalcButtons = (props) => {
   });
   
   return (
-    <div>
+    <div id="calc-inputs">
         {buttons}
     </div>
   );
@@ -62,6 +62,7 @@ class App extends Component {
   handleEvent(userInput) {
     let currentDisplay = this.state.display;
     let processedDisplay;
+
     if(userInput.id === "clear") {
       processedDisplay = ["0"];
     }
@@ -114,7 +115,7 @@ class App extends Component {
             </div>
           </div>
   
-          <div id="calc-inputs">
+          <div id="calc-bottom">
             <CalcButtons onClick={this.handleClick} />
           </div>
         </div>
