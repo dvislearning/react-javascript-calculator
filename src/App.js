@@ -4,7 +4,6 @@ import './calc-logic.js';
 import * as Calc from './calc-logic.js';
 
 
-
 const inputs = [
   {"id":"one", "className":"button", "key":"1"},
   {"id":"two", "className":"button", "key":"2"},
@@ -23,7 +22,6 @@ const inputs = [
   {"id":"equals", "className":"button", "key":"="},
   {"id":"add", "className":"button", "key":"+"},
   {"id":"clear", "className":"button", "key":"Escape"}
-
 ];
 
 const CalcButtons = (props) => {

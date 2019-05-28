@@ -1,11 +1,3 @@
-export function sayHi() {
-    alert("hi");
-  }
-
-export function saySup() {
-    alert("sup");
-}
-
 const operators = ["+","-","*","/"];
 
 function firstEntry(inputDisplay) {
@@ -39,7 +31,6 @@ function validZero(inputDisplay) {
     }
     return true;
 }
-
 
 // Checks if key press is valid
 export function processInput(input, inputDisplay) {    
@@ -143,14 +134,3 @@ export function evalExpression(string) {
         return total;
     }
 }
-
-
-// console.log(/\d+(\+|\-|\*|\\)\d+/g.test('55-6645'));
-// let testArr = "1123+6674".split(/(\+|\-|\*|\/)/g);
-// console.log(evalExpression("3+3+12*2/2*8/5-15*33/1222*53")); //110
-// console.log(evalExpression("3+3+12*2+2")) //32
-// console.log(evalExpression("3+3+12*2")); //30
-// console.log(calculateExpression(['13','+','41']));
-// console.log(processInput("8"));
-// console.log(display[display.length -1]);
-// console.log(validZero("0"));
