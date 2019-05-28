@@ -1,9 +1,9 @@
 # "Build A JavaScript Calculator"
 ### Fully Functional Calculator App
 
-[View this project on the web](#)
+[View this project on the web](https://dvislearning.github.io/react-javascript-calculator/)
 
-The fourth project in Free Code Camp's [Front End Libraries certification track](https://learn.freecodecamp.org/front-end-libraries/front-end-libraries-projects/build-a-drum-machine).
+The fourth project in Free Code Camp's [Front End Libraries certification track](https://learn.freecodecamp.org/front-end-libraries/front-end-libraries-projects/build-a-javascript-calculator/).
 
 This project demonstrates:
 
