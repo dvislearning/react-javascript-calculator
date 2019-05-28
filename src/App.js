@@ -106,7 +106,9 @@ class App extends Component {
       <div id="App">
         <div id="calculator">
           <div id="calc-header">
-            A Calculator
+            <span id="header-text">
+              Calculator by D.V.
+            </span>
           </div>
   
           <div id="display">
