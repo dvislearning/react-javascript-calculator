@@ -1,28 +1,64 @@
 import React, { Component } from 'react';
 import './App.css';
-import './calc-logic.js';
-import * as Calc from './calc-logic.js';
+import { processEquals, processInput, evalExpression } from './calc-logic.js';
+import { inputs } from './inputs.js';
+import { createStore } from 'redux';
+import { Provider, connect } from 'react-redux';
+
+// REDUX
+
+export const CLEAR = 'CLEAR';
+export const EQUALS = 'EQUALS';
+export const REGULARKEY = 'REGULARKEY';
 
 
-const inputs = [
-  {"id":"one", "className":"button", "key":"1"},
-  {"id":"two", "className":"button", "key":"2"},
-  {"id":"three", "className":"button", "key":"3"},
-  {"id":"divide", "className":"button", "key":"/"},
-  {"id":"four", "className":"button", "key":"4"},
-  {"id":"five", "className":"button", "key":"5"},
-  {"id":"six", "className":"button", "key":"6"},
-  {"id":"multiply", "className":"button", "key":"*"},
-  {"id":"seven", "className":"button", "key":"7"},
-  {"id":"eight", "className":"button", "key":"8"},
-  {"id":"nine", "className":"button", "key":"9"},
-  {"id":"subtract", "className":"button", "key":"-"},
-  {"id":"zero", "className":"button", "key":"0"},
-  {"id":"decimal", "className":"button", "key":"."},
-  {"id":"equals", "className":"button", "key":"="},
-  {"id":"add", "className":"button", "key":"+"},
-  {"id":"clear", "className":"button", "key":"Escape"}
-];
+const actionClear = (userInput) => {
+  return {
+    type: CLEAR,
+    input: userInput
+  }
+};
+
+const actionEquals = (userInput) => {
+  return {
+    type: EQUALS,
+    input: userInput
+  }
+};
+
+
+const actionRegularKey = (userInput) => {
+  return {
+    type: REGULARKEY,
+    input: userInput
+  }
+};
+
+
+const displayReducer = (state = [0], action) => {
+  switch(action.type) {
+      case CLEAR:
+          return [0];
+      case EQUALS:
+          let verifiedEqualsRequest = processEquals(state).join('');
+          let resultDisplayed = [evalExpression(verifiedEqualsRequest)];
+          return [resultDisplayed];
+      case REGULARKEY:
+          let processedDisplay = processInput(action.input.key, state);
+          return [processedDisplay];
+      default:
+          return state;
+  };
+};
+
+console.log(displayReducer(["7", "*", "8"], actionRegularKey({key: "8"})));
+
+const store = createStore(displayReducer);
+
+
+
+// REACT
+
 
 const CalcButtons = (props) => {
   console.log(props)
@@ -65,11 +101,11 @@ class App extends Component {
       processedDisplay = ["0"];
     }
     else if(userInput.id === "equals") {
-      let verifiedEqualsRequest = Calc.processEquals(currentDisplay).join('');
-      processedDisplay = [Calc.evalExpression(verifiedEqualsRequest)];
+      let verifiedEqualsRequest = processEquals(currentDisplay).join('');
+      processedDisplay = [evalExpression(verifiedEqualsRequest)];
     }
     else {
-      processedDisplay = Calc.processInput(userInput.key, currentDisplay);
+      processedDisplay = processInput(userInput.key, currentDisplay);
     }
 
     this.setState({
