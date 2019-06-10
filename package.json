@@ -33,7 +33,6 @@
     ]
   },
   "devDependencies": {
-    "babel-loader": "^8.0.6",
     "gh-pages": "^2.0.1"
   }
 }

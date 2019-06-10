@@ -7,51 +7,37 @@ import { Provider, connect } from 'react-redux';
 
 // REDUX
 
-export const CLEAR = 'CLEAR';
-export const EQUALS = 'EQUALS';
-export const REGULARKEY = 'REGULARKEY';
+export const ENTRY = 'ENTRY';
 
 
-const actionClear = (userInput) => {
+const modifyDisplay = (userInput) => {
   return {
-    type: CLEAR,
+    type: ENTRY,
     input: userInput
   }
 };
 
-const actionEquals = (userInput) => {
-  return {
-    type: EQUALS,
-    input: userInput
-  }
-};
-
-
-const actionRegularKey = (userInput) => {
-  return {
-    type: REGULARKEY,
-    input: userInput
-  }
-};
-
-
-const displayReducer = (state = [0], action) => {
+const displayReducer = (state = ['0'], action) => {
   switch(action.type) {
-      case CLEAR:
-          return [0];
-      case EQUALS:
-          let verifiedEqualsRequest = processEquals(state).join('');
-          let resultDisplayed = [evalExpression(verifiedEqualsRequest)];
-          return [resultDisplayed];
-      case REGULARKEY:
-          let processedDisplay = processInput(action.input.key, state);
-          return [processedDisplay];
+      case ENTRY:
+          if(action.input.id === 'clear') {
+            return ['0'];
+          }
+          else if(action.input.id === 'equals') {
+            let verifiedEqualsRequest = processEquals(state).join('');
+            let resultDisplayed = [evalExpression(verifiedEqualsRequest)];
+            state = resultDisplayed;
+            return state;
+          } 
+          else {
+            let processedDisplay = processInput(action.input.key, state);
+            state = processedDisplay;
+            return state;
+          }
       default:
           return state;
   };
 };
-
-console.log(displayReducer(["7", "*", "8"], actionRegularKey({key: "8"})));
 
 const store = createStore(displayReducer);
 
@@ -61,7 +47,6 @@ const store = createStore(displayReducer);
 
 
 const CalcButtons = (props) => {
-  console.log(props)
   const buttons = inputs.map(function(button) {
     return <button 
               className={button.className} 
@@ -85,7 +70,7 @@ class App extends Component {
     super(props);
 
     this.state={
-      display: ["0"]
+      currentEntry: ''
     }
 
     this.handleEvent = this.handleEvent.bind(this);
@@ -93,6 +78,7 @@ class App extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+/* 
   handleEvent(userInput) {
     let currentDisplay = this.state.display;
     let processedDisplay;
@@ -112,18 +98,24 @@ class App extends Component {
       display: processedDisplay
     }) 
   }
+  */
+
+  handleEvent(userInput){
+    this.props.handleDisplayInput(userInput);
+    this.setState({ currentEntry: '' })
+  }
 
   handlePress(event) {
     let pressTarget = inputs.filter(input => input.key === event.key);
     if(pressTarget.length){ 
-      this.handleEvent(pressTarget[0]);
+      this.handleEvent(pressTarget[0])
     }
   }
 
   handleClick(event) {
     if(event.target.className === "button"){
       const clickTarget = inputs.filter((input) => input.id === event.target.id)[0];
-      this.handleEvent(clickTarget);
+      this.handleEvent(clickTarget)
     }
   }
 
@@ -147,7 +139,7 @@ class App extends Component {
   
           <div id="display">
             <div id="display-text"> 
-              {this.state.display.join('')}
+              {this.props.display.join('')}
             </div>
           </div>
   
@@ -160,4 +152,31 @@ class App extends Component {
   }
 }
 
-export default App;
+
+// React-Redux
+
+const mapStateToProps = (state) => {
+  return {display: state}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleDisplayInput: (userInput) => {
+      dispatch(modifyDisplay(userInput))
+    }
+  }
+};
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(App);
+
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Container/>
+      </Provider>
+    );
+  }
+};
+
+export default AppWrapper;
