@@ -1,20 +1,24 @@
 import { processEquals, processInput, evalExpression } from '../calc-logic.js';
-import { CLEAR, EQUALS, REGULARKEY } from './types.js'
-// import { inputs } from '../inputs.js';
+import { ENTRY } from './types.js';
 
-const displayReducer = (state = [0], action) => {
+export const displayReducer = (state = ['0'], action) => {
     switch(action.type) {
-        case CLEAR:
-            return state;
-        case EQUALS:
-            let verifiedEqualsRequest = processEquals(state).join('');
-            processedDisplay = [evalExpression(verifiedEqualsRequest)];
-            return [processedDisplay];
-        case REGULARKEY:
-            let processedDisplay = processInput(action.userInput.key, state);
-            return [processedDisplay];
+        case ENTRY:
+            if(action.input.id === 'clear') {
+              return ['0'];
+            }
+            else if(action.input.id === 'equals') {
+              let verifiedEqualsRequest = processEquals(state).join('');
+              let resultDisplayed = [evalExpression(verifiedEqualsRequest)];
+              state = resultDisplayed;
+              return state;
+            } 
+            else {
+              let processedDisplay = processInput(action.input.key, state);
+              state = processedDisplay;
+              return state;
+            }
         default:
             return state;
     };
-};
-
+  };

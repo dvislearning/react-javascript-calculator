@@ -1,68 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import { processEquals, processInput, evalExpression } from './calc-logic.js';
 import { inputs } from './inputs.js';
 import { createStore } from 'redux';
-import { Provider, connect } from 'react-redux';
+import { connect } from 'react-redux';
+import { displayReducer } from './redux/reducers';
+import { mapDispatchToProps, mapStateToProps } from './redux/react-redux';
+import { CalcButtons } from './CalcButtons'
 
-// REDUX
-
-export const ENTRY = 'ENTRY';
-
-
-const modifyDisplay = (userInput) => {
-  return {
-    type: ENTRY,
-    input: userInput
-  }
-};
-
-const displayReducer = (state = ['0'], action) => {
-  switch(action.type) {
-      case ENTRY:
-          if(action.input.id === 'clear') {
-            return ['0'];
-          }
-          else if(action.input.id === 'equals') {
-            let verifiedEqualsRequest = processEquals(state).join('');
-            let resultDisplayed = [evalExpression(verifiedEqualsRequest)];
-            state = resultDisplayed;
-            return state;
-          } 
-          else {
-            let processedDisplay = processInput(action.input.key, state);
-            state = processedDisplay;
-            return state;
-          }
-      default:
-          return state;
-  };
-};
-
-const store = createStore(displayReducer);
-
-
-
-// REACT
-
-
-const CalcButtons = (props) => {
-  const buttons = inputs.map(function(button) {
-    return <button 
-              className={button.className} 
-              id={button.id} 
-              key={button.key} 
-              onClick={props.onClick}>
-                {button.key === "Escape" ? "AC" : button.key}
-          </button>
-  });
-  
-  return (
-    <div id="calc-inputs">
-        {buttons}
-    </div>
-  );
-}
 
 class App extends Component {
 
@@ -71,34 +15,12 @@ class App extends Component {
 
     this.state={
       currentEntry: ''
-    }
+    };
 
     this.handleEvent = this.handleEvent.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-
-/* 
-  handleEvent(userInput) {
-    let currentDisplay = this.state.display;
-    let processedDisplay;
-
-    if(userInput.id === "clear") {
-      processedDisplay = ["0"];
-    }
-    else if(userInput.id === "equals") {
-      let verifiedEqualsRequest = processEquals(currentDisplay).join('');
-      processedDisplay = [evalExpression(verifiedEqualsRequest)];
-    }
-    else {
-      processedDisplay = processInput(userInput.key, currentDisplay);
-    }
-
-    this.setState({
-      display: processedDisplay
-    }) 
-  }
-  */
 
   handleEvent(userInput){
     this.props.handleDisplayInput(userInput);
@@ -152,31 +74,6 @@ class App extends Component {
   }
 }
 
+export const Container = connect(mapStateToProps, mapDispatchToProps)(App);
 
-// React-Redux
-
-const mapStateToProps = (state) => {
-  return {display: state}
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    handleDisplayInput: (userInput) => {
-      dispatch(modifyDisplay(userInput))
-    }
-  }
-};
-
-const Container = connect(mapStateToProps, mapDispatchToProps)(App);
-
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Container/>
-      </Provider>
-    );
-  }
-};
-
-export default AppWrapper;
+export const store = createStore(displayReducer);
